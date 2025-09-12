@@ -50,8 +50,6 @@ dependencies:
   # UI packages
   cupertino_icons: ^1.0.8
   google_fonts: ^6.3.1
-  toastification: ^3.0.3
-  cached_network_image: ^3.4.1
 
   # Client packages
   dio: ^5.9.0
