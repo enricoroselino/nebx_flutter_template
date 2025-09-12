@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nebx_flutter_template/env.dart';
 import 'package:nebx_flutter_template/infrastructure/interfaces/security_check.dart';
 import 'package:nebx_flutter_template/pages/insecure_environment_page.dart';
 import 'package:nebx_flutter_template/router.dart';
