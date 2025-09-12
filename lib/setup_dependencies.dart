@@ -22,7 +22,8 @@ class SetupDependencies {
     locator.registerLazySingleton<Dio>(() {
       final client = Dio();
       return ClientBuilder(client: client)
-          .setInterceptor(SomeInterceptor())
+          .setBaseUrl("https://pokeapi.co/api/v2/")
+          .setRetryCount(2)
           .setInterceptor(SomeInterceptor())
           .build();
     });

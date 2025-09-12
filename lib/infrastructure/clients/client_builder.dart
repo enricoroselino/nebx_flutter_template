@@ -8,12 +8,15 @@ abstract class IClientBuilder {
   ClientBuilder setResponseType(ResponseType type);
   ClientBuilder setHeaders(Map<String, String> headers);
   ClientBuilder setInterceptor(Interceptor interceptor);
+  ClientBuilder setRetryCount(int count);
   Dio build();
 }
 
 class ClientBuilder implements IClientBuilder {
   final Dio _dio;
   final BaseOptions _baseOptions;
+  int _retryCount = 2;
+  List<Interceptor> _interceptors = [];
 
   ClientBuilder({required Dio client})
     : _dio = client,
@@ -44,25 +47,36 @@ class ClientBuilder implements IClientBuilder {
 
   @override
   ClientBuilder setInterceptor(Interceptor interceptor) {
-    _dio.interceptors.add(interceptor);
+    _interceptors.add(interceptor);
+    return this;
+  }
+
+  @override
+  ClientBuilder setRetryCount(int count) {
+    _retryCount = count;
     return this;
   }
 
   @override
   Dio build() {
-    final logger = PrettyDioLogger(
-      request: true,
-      requestBody: true,
-      responseBody: true,
-      requestHeader: true,
-      responseHeader: true,
-      error: true,
-      compact: false,
-    );
-
     // add default interceptors
-    _dio.interceptors.add(RetryInterceptor(dio: _dio, retries: 2));
-    if (kDebugMode) _dio.interceptors.add(logger);
+    _dio.interceptors.add(RetryInterceptor(dio: _dio, retries: _retryCount));
+
+    if (kDebugMode) {
+      final logger = PrettyDioLogger(
+        request: true,
+        requestBody: true,
+        responseBody: true,
+        requestHeader: true,
+        responseHeader: true,
+        error: true,
+        compact: false,
+      );
+
+      _dio.interceptors.add(logger);
+    }
+
+    _dio.interceptors.addAll(_interceptors);
 
     // add base options
     _dio.options = _baseOptions;
