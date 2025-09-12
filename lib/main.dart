@@ -10,7 +10,7 @@ import 'package:nebx_flutter_template/setup_dependencies.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  Env.init();
+  // Env.init(); // commented as the env is blank
   SetupDependencies.init();
   runApp(const ProviderScope(child: MyApp()));
 }
