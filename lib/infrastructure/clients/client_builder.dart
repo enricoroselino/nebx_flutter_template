@@ -4,19 +4,20 @@ import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 abstract class IClientBuilder {
-  ClientBuilder setBaseUrl(String url);
-  ClientBuilder setResponseType(ResponseType type);
-  ClientBuilder setHeaders(Map<String, String> headers);
-  ClientBuilder setInterceptor(Interceptor interceptor);
-  ClientBuilder setRetryCount(int count);
+  IClientBuilder setBaseUrl(String url);
+  IClientBuilder setResponseType(ResponseType type);
+  IClientBuilder setHeaders(Map<String, String> headers);
+  IClientBuilder setInterceptor(Interceptor interceptor);
+  IClientBuilder setRetryCount(int count);
   Dio build();
 }
 
 class ClientBuilder implements IClientBuilder {
   final Dio _dio;
   final BaseOptions _baseOptions;
+
+  final List<Interceptor> _interceptors = [];
   int _retryCount = 2;
-  List<Interceptor> _interceptors = [];
 
   ClientBuilder({required Dio client})
     : _dio = client,
@@ -28,31 +29,31 @@ class ClientBuilder implements IClientBuilder {
       );
 
   @override
-  ClientBuilder setBaseUrl(String url) {
+  IClientBuilder setBaseUrl(String url) {
     _baseOptions.baseUrl = url;
     return this;
   }
 
   @override
-  ClientBuilder setResponseType(ResponseType type) {
+  IClientBuilder setResponseType(ResponseType type) {
     _baseOptions.responseType = type;
     return this;
   }
 
   @override
-  ClientBuilder setHeaders(Map<String, String> headers) {
+  IClientBuilder setHeaders(Map<String, String> headers) {
     _baseOptions.headers.addAll(headers);
     return this;
   }
 
   @override
-  ClientBuilder setInterceptor(Interceptor interceptor) {
+  IClientBuilder setInterceptor(Interceptor interceptor) {
     _interceptors.add(interceptor);
     return this;
   }
 
   @override
-  ClientBuilder setRetryCount(int count) {
+  IClientBuilder setRetryCount(int count) {
     _retryCount = count;
     return this;
   }
