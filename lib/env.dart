@@ -12,12 +12,4 @@ class Env {
       ],
     );
   }
-
-  static String get dummyClientUrl {
-    const String key = "DUMMY_CLIENT_URL";
-    return dotenv.env[key] ?? _throw(key);
-  }
-
-  static String _throw(String key) =>
-      throw Exception('❌ Environment variable $key not found');
 }
