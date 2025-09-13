@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nebx_flutter_template/core/themes/app_theme.dart';
+import 'package:nebx_flutter_template/core/themes/app_theme_provider.dart';
 import 'package:nebx_flutter_template/infrastructure/interfaces/security_check.dart';
 import 'package:nebx_flutter_template/pages/insecure_environment_page.dart';
 import 'package:nebx_flutter_template/router.dart';
@@ -14,17 +16,21 @@ void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final security = locator.get<ISecurityCheck>();
+    final themeMode = ref.watch(appThemeProvider);
 
     return FutureBuilder(
       future: security.isEnvironmentSecure(),
       builder: (context, snapshot) {
         if (snapshot.data == false) {
-          return const MaterialApp(
+          return MaterialApp(
+            theme: AppTheme.lightMode,
+            darkTheme: AppTheme.darkMode,
+            themeMode: themeMode,
             home: InsecureEnvironmentPage(),
             debugShowCheckedModeBanner: kDebugMode,
           );
@@ -32,10 +38,9 @@ class MyApp extends StatelessWidget {
 
         return MaterialApp.router(
           routerConfig: router,
-          title: 'Nebx Flutter Template',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          ),
+          theme: AppTheme.lightMode,
+          darkTheme: AppTheme.darkMode,
+          themeMode: themeMode,
           debugShowCheckedModeBanner: kDebugMode,
         );
       },
