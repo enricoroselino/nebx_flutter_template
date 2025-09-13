@@ -14,7 +14,7 @@ abstract class IClientBuilder {
 
 class ClientBuilder implements IClientBuilder {
   final Dio _dio;
-  final BaseOptions _baseOptions;
+  BaseOptions _baseOptions;
 
   final List<Interceptor> _interceptors = [];
   int _retryCount = 2;
@@ -30,19 +30,19 @@ class ClientBuilder implements IClientBuilder {
 
   @override
   IClientBuilder setBaseUrl(String url) {
-    _baseOptions.baseUrl = url;
+    _baseOptions = _baseOptions.copyWith(baseUrl: url);
     return this;
   }
 
   @override
   IClientBuilder setResponseType(ResponseType type) {
-    _baseOptions.responseType = type;
+    _baseOptions = _baseOptions.copyWith(responseType: type);
     return this;
   }
 
   @override
   IClientBuilder setHeaders(Map<String, String> headers) {
-    _baseOptions.headers.addAll(headers);
+    _baseOptions.copyWith(headers: headers);
     return this;
   }
 
