@@ -42,7 +42,7 @@ class ClientBuilder implements IClientBuilder {
 
   @override
   IClientBuilder setHeaders(Map<String, String> headers) {
-    _baseOptions.copyWith(headers: headers);
+    _baseOptions = _baseOptions.copyWith(headers: headers);
     return this;
   }
 
