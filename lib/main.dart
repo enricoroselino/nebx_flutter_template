@@ -2,8 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nebx_flutter_template/core/themes/app_theme.dart';
-import 'package:nebx_flutter_template/core/themes/app_theme_provider.dart';
-import 'package:nebx_flutter_template/infrastructure/interfaces/security_check.dart';
+import 'package:nebx_flutter_template/core/providers/app_theme_provider.dart';
+import 'package:nebx_flutter_template/infrastructure/providers/security_provider.dart';
+import 'package:nebx_flutter_template/pages/error_page.dart';
 import 'package:nebx_flutter_template/pages/insecure_environment_page.dart';
 import 'package:nebx_flutter_template/router.dart';
 import 'package:nebx_flutter_template/setup_dependencies.dart';
@@ -20,13 +21,20 @@ class MyApp extends ConsumerWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final security = locator.get<ISecurityCheck>();
-    final themeMode = ref.watch(appThemeProvider);
+    final securityCheckAsyncValue = ref.watch(securityCheckProvider);
+    final themeModeAsyncValue = ref.watch(appThemeProvider);
 
-    return FutureBuilder(
-      future: security.isEnvironmentSecure(),
-      builder: (context, snapshot) {
-        if (snapshot.data == false) {
+    return securityCheckAsyncValue.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, stack) => ErrorPage(),
+      data: (isDeviceSecure) {
+        final themeMode = themeModeAsyncValue.when(
+          data: (data) => data,
+          error: (_, __) => ThemeMode.system,
+          loading: () => ThemeMode.system,
+        );
+
+        if (!isDeviceSecure) {
           return MaterialApp(
             theme: AppTheme.lightMode,
             darkTheme: AppTheme.darkMode,
