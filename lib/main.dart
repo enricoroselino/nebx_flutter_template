@@ -21,14 +21,14 @@ class MyApp extends ConsumerWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final securityCheckAsyncValue = ref.watch(securityCheckProvider);
-    final themeModeAsyncValue = ref.watch(appThemeProvider);
+    final secureDeviceAsync = ref.watch(secureDeviceProvider);
+    final themeModeAsync = ref.watch(appThemeProvider);
 
-    return securityCheckAsyncValue.when(
+    return secureDeviceAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, stack) => ErrorPage(),
       data: (isDeviceSecure) {
-        final themeMode = themeModeAsyncValue.when(
+        final themeMode = themeModeAsync.when(
           data: (data) => data,
           error: (_, __) => ThemeMode.system,
           loading: () => ThemeMode.system,

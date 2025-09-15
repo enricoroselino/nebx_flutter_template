@@ -3,10 +3,11 @@ import 'package:nebx_flutter_template/infrastructure/interfaces/security_check.d
 import 'package:nebx_flutter_template/setup_dependencies.dart';
 
 final securityServiceProvider = Provider<ISecurityCheck>(
-  (ref) => locator.get<ISecurityCheck>(),
+  (_) => locator.get<ISecurityCheck>(),
 );
 
-final securityCheckProvider = FutureProvider<bool>((ref) async {
+// Future provider because this not gonna change state
+final secureDeviceProvider = FutureProvider<bool>((ref) async {
   final security = ref.read(securityServiceProvider);
 
   final tasks = [security.isEnvironmentSecure(), security.isLocationSecure()];

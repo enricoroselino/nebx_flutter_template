@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nebx_flutter_template/infrastructure/interfaces/shared_preferences.dart';
@@ -11,7 +13,7 @@ class AppThemeNotifier extends AsyncNotifier<ThemeMode> {
   static const String _themeKey = "APP_THEME_MODE_KEY";
 
   @override
-  Future<ThemeMode> build() async {
+  FutureOr<ThemeMode> build() async {
     final isDarkMode = await _pref.getInt(_themeKey);
     if (isDarkMode == null) return ThemeMode.system;
 
