@@ -6,7 +6,6 @@ import 'package:nebx_flutter_template/core/blocs/security_event.dart';
 import 'package:nebx_flutter_template/core/blocs/sercurity_state.dart';
 import 'package:nebx_flutter_template/images.dart';
 import 'package:nebx_flutter_template/infrastructure/interfaces/security_check.dart';
-import 'package:nebx_flutter_template/pages.dart';
 import 'package:nebx_flutter_template/setup_dependencies.dart';
 
 class SplashPage extends StatelessWidget {
@@ -22,9 +21,9 @@ class SplashPage extends StatelessWidget {
       child: BlocListener<SecurityBloc, SecurityState>(
         listener: (context, state) {
           if (state is SecuritySecure) {
-            context.go(Pages.home.path);
+            context.go("/home");
           } else if (state is SecurityInsecure) {
-            context.go(Pages.error.path);
+            context.go("/error");
           }
         },
         child: Scaffold(
